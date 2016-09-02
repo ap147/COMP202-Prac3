@@ -25,6 +25,7 @@ capable of reproducing and modifying it. If there is anything in your code that 
 stand, seek help until you do.
 You must submit your les to Moodle in order to receive any marks recorded on your veri-
 cation page.
+
 This assignment is due September 12th at 11am and worth 6% of your nal grade. If the as-
 signment is veried after the 12th, it is worth 1% less for each lab session after the 12th where it
 could have been veried.
