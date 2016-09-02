@@ -1,4 +1,6 @@
-# COMP202-Prac2
+# COMP202-Prac3
+
+READ PDF (03-ip2as.pdf)
 **Longest Prefix Matching**
 
 **1 Introduction**
@@ -28,8 +30,8 @@ signment is veried after the 12th, it is worth 1% less for each lab session aft
 could have been veried.
 
 **3 Materials**
-You are provided with an IP2AS mapping le that was derived from public BGP data. 
-Briefly, I processed archives of BGP raw data les that contained routes (prexes and paths), 
+You are provided with an IP2AS mapping le that was derived from public BGP data.
+Briefly, I processed archives of BGP raw data les that contained routes (prexes and paths),
 i.e.:
 
 3303|7575|38022|681 130.217.0.0/16
