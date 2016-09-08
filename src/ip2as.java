@@ -47,6 +47,14 @@ class prefix
 	 * initialise the object given the inputs.  break
 	 * the network ID into four integers.
 	 */
+	  String arrayString[] = net.split(".");
+        this.net[0] = Integer.parseInt(arrayString[0]);
+        this.net[1] = Integer.parseInt(arrayString[1]);
+        this.net[2] = Integer.parseInt(arrayString[2]);
+        this.net[3] = Integer.parseInt(arrayString[3]);
+
+        this.asn = asn;
+
     }
 
     public String toString()
@@ -90,6 +98,7 @@ class ip2as
         if(args.length < 3) {
 	    /* always check the input to the program! */
             System.err.println("usage: ip2as <prefixes> <asnames> [ip0 ip1 .. ipN]");
+            //java ip2as 20160701.ip2as.txt asnames.txt 128.30.2.155 10.110.8.71 1.0.192.1 205.204.15.1
             return;
         }
 
@@ -103,6 +112,17 @@ class ip2as
 		/* XXX: add code to parse the ip2as line */
                 String net, ases;
                 int len;
+
+                String array[] = line.split(" ");
+                String array2[] = array[0].split("/");
+
+                //85.29.150.0/23 21299
+                //Getting "1.1.1.1/2" "1.1.1.1"
+                net = array2[0];
+                //Getting "1.1.1.1/2" "/"
+                len = Integer.parseInt(array2[1]);
+                ases = array[1];
+
 
 		/* create a new prefix object and stuff it in the list */
                 prefix pf = new prefix(net, len, ases);
