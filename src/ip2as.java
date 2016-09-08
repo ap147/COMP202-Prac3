@@ -73,11 +73,18 @@ class prefix
     {
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         int i;
+        /*
+	     * XXX:
+	     * break up the address passed in as a string
+	     */
 
-	/*
-	 * XXX:
-	 * break up the address passed in as a string
-	 */
+        String[] Stringarray = addr.split(".");
+        int[] array = {0,0,0,0};
+
+        array[0] = Integer.parseInt(Stringarray[0]);
+        array[1] = Integer.parseInt(Stringarray[1]);
+        array[2] = Integer.parseInt(Stringarray[2]);
+        array[3] = Integer.parseInt(Stringarray[3]);
 
         for(i=0; i<4; i++) {
 	    /*
@@ -109,7 +116,7 @@ class ip2as
             String line;
 
             while((line = file.readLine()) != null) {
-		/* XXX: add code to parse the ip2as line */
+		/* -------------------------------------------------XXX: add code to parse the ip2as line */
                 String net, ases;
                 int len;
 
@@ -158,7 +165,8 @@ class ip2as
 	 * corresponding prefix, print the IP address and then say no
 	 * corresponding prefix.
 	 */
-        for(int i=2; i<args.length; i++) {
+        for(int i=2; i<args.length; i++)
+        {
             int matched = 0;
 
 	    /*
@@ -168,15 +176,26 @@ class ip2as
             for(int j=0; j<x.length; j++) {
                 prefix p = x[j];
 
-		/*
+		/*-------------------------------------------------------------------------
 		 * XXX:
 		 * check if this prefix matches the IP address passed in
 		 */
+		        boolean Result = p.match(args[i]);
+                if(Result == true)
+                {
+                    System.out.print(args[i]);
+                    p.toString();
+                }
             }
 	    /*
 	     * XXX:
 	     * print something out if it was not matched
 	     */
+
+	        if (matched == 0)
+            {
+                System.out.println( args[i]+" : no prefix");
+            }
         }
         return;
     }

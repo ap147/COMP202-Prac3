@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/ip2as.java" line="119" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="fbff748e-9c70-4e74-a800-b32175a22939" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ip2as.java" afterPath="$PROJECT_DIR$/src/ip2as.java" />
     </list>
     <ignored path="COMP202 Prac 2.iws" />
@@ -27,11 +29,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="ip2as.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ip2as.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/ip2as.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="374">
-                  <caret line="122" column="50" selection-start-line="122" selection-start-column="50" selection-end-line="122" selection-end-column="50" />
+                <state relative-caret-position="334">
+                  <caret line="78" column="8" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="method#toString#0;class#prefix#0" expanded="false" />
@@ -56,7 +58,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ip2as.txt" pinned="false" current-in-tab="false">
+          <file leaf-file-name="ip2as.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/ip2as.txt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="164">
@@ -83,8 +85,8 @@
           <file leaf-file-name="ip2as.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/ip2as.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
-                  <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
+                <state relative-caret-position="2244">
+                  <caret line="178" column="83" selection-start-line="178" selection-start-column="83" selection-end-line="178" selection-end-column="83" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -603,12 +605,12 @@
       <workItem from="1472719411490" duration="446000" />
       <workItem from="1472719887724" duration="381000" />
       <workItem from="1472730205797" duration="1392000" />
-      <workItem from="1473216315442" duration="8626000" />
+      <workItem from="1473216315442" duration="11211000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10845000" />
+    <option name="totallyTimeSpent" value="13430000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -652,7 +654,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -662,7 +666,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#toString#0;class#prefix#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -703,7 +706,6 @@
           <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#toString#0;class#prefix#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -728,7 +730,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#toString#0;class#prefix#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -772,11 +773,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ip2as.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="122" column="50" selection-start-line="122" selection-start-column="50" selection-end-line="122" selection-end-column="50" />
+        <state relative-caret-position="2244">
+          <caret line="178" column="83" selection-start-line="178" selection-start-column="83" selection-end-line="178" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#toString#0;class#prefix#0" expanded="false" />
           </folding>
         </state>
       </provider>
