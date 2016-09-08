@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.net.*;
 
 /*
  * prefixComparator
@@ -42,7 +41,7 @@ class prefix
 
     public prefix(String net, int len, String asn)
     {
-	/*
+	/*------------------------------------------------------------------------
 	 * XXX:
 	 * initialise the object given the inputs.  break
 	 * the network ID into four integers.
@@ -54,6 +53,7 @@ class prefix
         this.net[3] = Integer.parseInt(arrayString[3]);
 
         this.asn = asn;
+        this.len = len;
 
     }
 
@@ -71,13 +71,13 @@ class prefix
      */
     public boolean match(String addr)
     {
+        boolean Result = false;
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
-        int i;
         /*
 	     * XXX:
 	     * break up the address passed in as a string
 	     */
-
+      //  12.12.12.12
         String[] Stringarray = addr.split(".");
         int[] array = {0,0,0,0};
 
@@ -86,7 +86,9 @@ class prefix
         array[2] = Integer.parseInt(Stringarray[2]);
         array[3] = Integer.parseInt(Stringarray[3]);
 
-        for(i=0; i<4; i++) {
+        for(int i=0; i<4; i++)
+        {
+
 	    /*
 	     * XXX:
 	     * compare up to four different values in the dotted quad,
@@ -94,15 +96,17 @@ class prefix
 	     * address is a match or not
 	     */
         }
-
+        return Result;
     }
 };
 
 class ip2as
 {
+    protected static ArrayList<String> ASNlist = new ArrayList<>();
     public static void main(String args[])
     {
-        if(args.length < 3) {
+        if(args.length < 3)
+        {
 	    /* always check the input to the program! */
             System.err.println("usage: ip2as <prefixes> <asnames> [ip0 ip1 .. ipN]");
             //java ip2as 20160701.ip2as.txt asnames.txt 128.30.2.155 10.110.8.71 1.0.192.1 205.204.15.1
@@ -111,11 +115,13 @@ class ip2as
 
 	/* read the prefix list into a list */
         ArrayList<prefix> list = new ArrayList<prefix>();
-        try {
+        try
+        {
             BufferedReader file = new BufferedReader(new FileReader(args[0]));
             String line;
 
-            while((line = file.readLine()) != null) {
+            while((line = file.readLine()) != null)
+            {
 		/* -------------------------------------------------XXX: add code to parse the ip2as line */
                 String net, ases;
                 int len;
@@ -131,17 +137,19 @@ class ip2as
                 ases = array[1];
 
 
-		/* create a new prefix object and stuff it in the list */
+		        /* create a new prefix object and stuff it in the list */
                 prefix pf = new prefix(net, len, ases);
                 list.add(pf);
             }
             file.close();
         }
-        catch(FileNotFoundException e) {
+        catch(FileNotFoundException e)
+        {
             System.err.println("could not open prefix file " + args[0]);
             return;
         }
-        catch(IOException e) {
+        catch(IOException e)
+        {
             System.err.println("error reading prefix file " + args[0] + ": " +e);
         }
 
@@ -157,6 +165,8 @@ class ip2as
 	 * read in the asnames file so that we can report the
 	 * network's name with its ASN
 	 */
+        FetchASNames(args[1]);
+
 
 	/*
 	 * for all IP addresses supplied on the command line, print
@@ -173,7 +183,8 @@ class ip2as
 	     * x contains the sorted array of prefixes, organised longest
 	     * to shortest prefix match
 	     */
-            for(int j=0; j<x.length; j++) {
+            for(int j=0; j<x.length; j++)
+            {
                 prefix p = x[j];
 
 		/*-------------------------------------------------------------------------
@@ -198,5 +209,28 @@ class ip2as
             }
         }
         return;
+    }
+    public static void FetchASNames(String fileName)
+    {
+        try
+        {
+            BufferedReader file = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            while((line = file.readLine()) != null)
+            {
+                ASNlist.add(line);
+            }
+            file.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            System.err.println("could not open ASN file " + fileName);
+            return;
+        }
+        catch(IOException e)
+        {
+            System.err.println("error reading ASN file " + fileName + ": " +e);
+        }
     }
 };
