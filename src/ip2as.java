@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-
+//http://www.tutorialspoint.com/java/java_using_comparator.htm
 /*
  * prefixComparator
  *
@@ -21,7 +21,23 @@ class prefixComparator implements Comparator<prefix>
 	 * on how the return value from this method will impact sort order.
 	 * make sure the longest prefixes are sorted so that they come
 	 * first!
+	 *  This method returns zero if the objects are equal.
+	 *  It returns a positive value if obj1 is greater than obj2. Otherwise, a negative value is returned.
 	 */
+	    int result = 0;
+
+        if(a.len > b.len)
+        {
+            System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
+            return 1;
+        }
+        else if(a.len < b.len)
+        {
+            System.out.println("a has a smaller prefix than b : a:" + a.len + " b : " + b.len);
+            return -1;
+        }
+
+        return result;
     }
 };
 
@@ -74,10 +90,9 @@ class prefix
         boolean Result = false;
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         /*
-	     * XXX:
+	     * XXX:------------------------------------------------------------------------
 	     * break up the address passed in as a string
 	     */
-      //  12.12.12.12
         String[] Stringarray = addr.split(".");
         int[] array = {0,0,0,0};
 
@@ -211,6 +226,8 @@ class ip2as
         }
         return;
     }
+
+    //Goes through file, adding all AS's to a list, which later used to retrive information
     public static void FetchASNames(String fileName)
     {
         try
