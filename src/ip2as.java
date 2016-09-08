@@ -189,13 +189,27 @@ class ip2as
 
 		/*-------------------------------------------------------------------------
 		 * XXX:
-		 * check if this prefix matches the IP address passed in
+		 * check if this prefix matches the IP address passed in----------------------------------------------
 		 */
 		        boolean Result = p.match(args[i]);
                 if(Result == true)
                 {
                     System.out.print(args[i]);
                     p.toString();
+
+                    for(int y = 0; y < ASNlist.size(); y++)
+                    {
+                        String temp = ASNlist.get(y);
+                        String array[] = temp.split(temp);
+                        int ASNNumber = Integer.parseInt(array[0]);
+
+                        if(ASNNumber == p.len)
+                        {
+                            System.out.println(array[1]);
+                            break;
+                        }
+                    }
+
                 }
             }
 	    /*
