@@ -196,24 +196,11 @@ class ip2as
                 {
                     System.out.print(args[i]);
                     p.toString();
-
-                    for(int y = 0; y < ASNlist.size(); y++)
-                    {
-                        String temp = ASNlist.get(y);
-                        String array[] = temp.split(temp);
-                        int ASNNumber = Integer.parseInt(array[0]);
-
-                        if(ASNNumber == p.len)
-                        {
-                            System.out.println(array[1]);
-                            break;
-                        }
-                    }
-
+                    System.out.println(GetASNName(p.len));
                 }
             }
 	    /*
-	     * XXX:
+	     * XXX:---------------------------------------------------------------------------------------------
 	     * print something out if it was not matched
 	     */
 
@@ -246,5 +233,22 @@ class ip2as
         {
             System.err.println("error reading ASN file " + fileName + ": " +e);
         }
+    }
+
+    //finds the AS Name by a AS Number
+    private static String GetASNName(int p)
+    {
+        for(int y = 0; y < ASNlist.size(); y++)
+        {
+            String temp = ASNlist.get(y);
+            String array[] = temp.split(temp);
+            int ASNNumber = Integer.parseInt(array[0]);
+
+            if(ASNNumber == p)
+            {
+              return array[1];
+            }
+        }
+        return "";
     }
 };
