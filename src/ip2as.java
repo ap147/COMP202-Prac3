@@ -28,12 +28,12 @@ class prefixComparator implements Comparator<prefix>
 
         if(a.len > b.len)
         {
-            System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
+            //System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
             return 1;
         }
         else if(a.len < b.len)
         {
-            System.out.println("a has a smaller prefix than b : a:" + a.len + " b : " + b.len);
+           // System.out.println("a has a smaller prefix than b : a:" + a.len + " b : " + b.len);
             return -1;
         }
 
@@ -51,7 +51,8 @@ class prefixComparator implements Comparator<prefix>
  */
 class prefix
 {
-    public int[]       net = {0,0,0,0};
+    public ArrayList<Integer> net = new ArrayList<Integer>();
+    //public int[]       net = {0,0,0,0};
     public int         len;
     public String      asn;
 
@@ -62,21 +63,26 @@ class prefix
 	 * initialise the object given the inputs.  break
 	 * the network ID into four integers.
 	 */
-	  String arrayString[] = net.split(".");
-        this.net[0] = Integer.parseInt(arrayString[0]);
-        this.net[1] = Integer.parseInt(arrayString[1]);
-        this.net[2] = Integer.parseInt(arrayString[2]);
-        this.net[3] = Integer.parseInt(arrayString[3]);
-
+        addToNet(net);
         this.asn = asn;
         this.len = len;
-
     }
+    private void addToNet(String x )
+    {
+        String arrayString[] = x.split(".");
+        net.add(Integer.parseInt(arrayString[0]));
+        net.add(Integer.parseInt(arrayString[1]));
+        net.add(Integer.parseInt(arrayString[2]));
 
+        //this.net[0] = Integer.parseInt(arrayString[0]);
+        //this.net[1] = Integer.parseInt(arrayString[1]);
+        //this.net[2] = Integer.parseInt(arrayString[2]);
+        //this.net[3] = Integer.parseInt(arrayString[3]);
+    }
     public String toString()
     {
 	/* pretty print out of the prefix! my lecturer is kind! */
-        return net[0] + "." + net[1] + "." + net[2] + "." + net[3] + "/" + len;
+       return net.get(0) + "." + net.get(1) + "." + net.get(2) + "." + net.get(3) + "/" + len;
     }
 
     /*
@@ -88,12 +94,14 @@ class prefix
     public boolean match(String addr)
     {
         boolean Result = false;
+        int match = 0;
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         /*
 	     * XXX:------------------------------------------------------------------------
 	     * break up the address passed in as a string
 	     */
         String[] Stringarray = addr.split(".");
+        int result;
         int[] array = {0,0,0,0};
 
         array[0] = Integer.parseInt(Stringarray[0]);
@@ -103,13 +111,29 @@ class prefix
 
         for(int i=0; i<4; i++)
         {
-
+            //Mask Address given with len
+            //Copare if thats what we want
+            if(len == 24)
+            {
+                if(i < 4) {
+                    result = array[0] & mask[7];
+                    int x = array[i] & mask[i];
+                    if(x == array[i])
+                    {
+                        match = match + 1;
+                    }
+                }
+            }
 	    /*
 	     * XXX:
 	     * compare up to four different values in the dotted quad,
 	     * (i.e. enough to cover this.len) to determine if this
 	     * address is a match or not
 	     */
+        }
+        if(match == 3)
+        {
+            return true;
         }
         return Result;
     }
