@@ -255,17 +255,14 @@ class ip2as
     //finds the AS Name by a AS Number
     private static String GetASNName(int p)
     {
-        for(int y = 0; y < ASNlist.size(); y++)
+        try
         {
-            String temp = ASNlist.get(y);
-            String array[] = temp.split(temp);
-            int ASNNumber = Integer.parseInt(array[0]);
-
-            if(ASNNumber == p)
-            {
-              return array[1];
-            }
+            String ASN = ASNlist.get(p);
+            return ASN;
         }
-        return "";
+        catch(Exception x)
+        {
+            return "";
+        }
     }
 };
