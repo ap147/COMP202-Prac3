@@ -1,9 +1,15 @@
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.io.*;
 import java.util.regex.Pattern;
 
 //http://www.tutorialspoint.com/java/java_using_comparator.htm
 //http://stackoverflow.com/questions/31402113/why-i-cannot-split-string-with-in-java
+//http://stackoverflow.com/questions/4209760/validate-an-ip-address-with-mask
+//http://stackoverflow.com/questions/14669820/how-to-convert-a-string-array-to-a-byte-array-java
 /*
  * prefixComparator
  *
@@ -56,6 +62,7 @@ class prefix
 {
 
     public int[]       net = {0,0,0,0};
+    protected String easyNet;
    // public int[] net = new int[4];
 
     public int         len;
@@ -74,22 +81,54 @@ class prefix
     }
     private void addToNet(String x )
     {
-        System.out.println(x);
-
         String arrayString[] = x.split(Pattern.quote("."));
         this.net[0] = Integer.parseInt(arrayString[0]);
-        System.out.println(net[0]);
         this.net[1] = Integer.parseInt(arrayString[1]);
-        System.out.println(net[1]);
         this.net[2] = Integer.parseInt(arrayString[2]);
-        System.out.println(net[2]);
         this.net[3] = Integer.parseInt(arrayString[3]);
-        System.out.println(net[3]);
+        easyNet = x;
     }
     public String toString()
     {
 	/* pretty print out of the prefix! my lecturer is kind! */
        return net[0] + "." + net[1] + "." + net[2] + "." + net[3] + "/" + len;
+    }
+
+    public boolean Eazymatch(String addr) throws UnknownHostException {
+
+
+
+        //IP
+        String       s = addr;
+        Inet4Address a = (Inet4Address) InetAddress.getByName(s);
+        byte [] ipByte = a.getAddress();
+        int IP = ((ipByte[0] & 0xFF) << 24) |
+                ((ipByte[1] & 0xFF) << 16) |
+                ((ipByte[2] & 0xFF) << 8)  |
+                ((ipByte[3] & 0xFF) << 0);
+
+        //SUBNET
+        Inet4Address b = (Inet4Address) InetAddress.getByName(easyNet);
+        byte [] subByte = b.getAddress();
+        int Subnet = ((subByte[0] & 0xFF) << 24) |
+                ((subByte[1] & 0xFF) << 16) |
+                ((subByte[2] & 0xFF) << 8)  |
+                ((subByte[3] & 0xFF) << 0);
+
+
+        int subnetBits = len;
+
+        int mask = -1 << (32 - subnetBits);
+
+        if((Subnet & mask) == (IP& mask))
+        {
+            System.out.println(addr);
+            System.out.println(this.toString());
+            System.out.println(this.asn);
+            return true;
+        }
+        return false;
+
     }
 
     /*
@@ -100,37 +139,37 @@ class prefix
      */
     public boolean match(String addr)
     {
+        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         boolean Result = false;
         int match = 0;
-        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         /*
 	     * XXX:------------------------------------------------------------------------
 	     * break up the address passed in as a string
 	     */
-        String[] Stringarray = addr.split(".");
+
+
+        //IP
+        String arrayString[] = addr.split(Pattern.quote("."));
         int result;
         int[] array = {0,0,0,0};
 
-        array[0] = Integer.parseInt(Stringarray[0]);
-        array[1] = Integer.parseInt(Stringarray[1]);
-        array[2] = Integer.parseInt(Stringarray[2]);
-        array[3] = Integer.parseInt(Stringarray[3]);
+        array[0] = Integer.parseInt(arrayString[0]);
+        array[1] = Integer.parseInt(arrayString[1]);
+        array[2] = Integer.parseInt(arrayString[2]);
+        array[3] = Integer.parseInt(arrayString[3]);
 
+        int lenCounter = len;
+        //COMPARE 8 Bits
         for(int i=0; i<4; i++)
         {
-            //Mask Address given with len
-            //Copare if thats what we want
-            if(len == 24)
-            {
-                if(i < 4) {
-                    result = array[0] & mask[7];
-                    int x = array[i] & mask[i];
-                    if(x == array[i])
-                    {
-                        match = match + 1;
-                    }
-                }
-            }
+
+
+             // if((array[i] & mask[6]) == (net[i] & mask[6]))
+               //   match++;
+
+
+
+
 	    /*
 	     * XXX:
 	     * compare up to four different values in the dotted quad,
@@ -138,19 +177,33 @@ class prefix
 	     * address is a match or not
 	     */
         }
+
+
         if(match == 3)
         {
             return true;
         }
         return Result;
     }
+    public int getLen()
+    {
+        return len;
+    }
+    protected int getMask(int position)
+    {
+        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
+        int maskresult =0;
+
+
+
+        return maskresult;
+    }
 };
 
 class ip2as
 {
     protected static ArrayList<String> ASNlist = new ArrayList<>();
-    public static void main(String args[])
-    {
+    public static void main(String args[]) throws UnknownHostException {
         if(args.length < 3)
         {
 	    /* always check the input to the program! */
@@ -206,7 +259,6 @@ class ip2as
         prefix []x = new prefix[list.size()];
         list.toArray(x);
         Arrays.sort(x, new prefixComparator());
-
 	/*
 	 * read in the asnames file so that we can report the
 	 * network's name with its ASN
@@ -221,28 +273,27 @@ class ip2as
 	 * corresponding prefix, print the IP address and then say no
 	 * corresponding prefix.
 	 */
+	System.out.println();
         for(int i=2; i<args.length; i++)
         {
             int matched = 0;
-
 	    /*
 	     * x contains the sorted array of prefixes, organised longest
 	     * to shortest prefix match
 	     */
+	        prefix p = x[i];
             for(int j=0; j<x.length; j++)
             {
-                prefix p = x[j];
+                 p = x[j];
 
 		/*-------------------------------------------------------------------------
 		 * XXX:
 		 * check if this prefix matches the IP address passed in----------------------------------------------
 		 */
-		        boolean Result = p.match(args[i]);
+		        boolean Result = p.Eazymatch(args[i]);
                 if(Result == true)
                 {
-                    System.out.print(args[i]);
-                    p.toString();
-                    System.out.println(GetASNName(p.len));
+                    System.out.println( args[i] +" "+ p.toString()+ " " +GetASNName(p.len));
                 }
             }
 	    /*
@@ -252,6 +303,7 @@ class ip2as
 
 	        if (matched == 0)
             {
+                System.out.println(p.getLen());
                 System.out.println( args[i]+" : no prefix");
             }
         }
