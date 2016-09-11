@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.*;
+import java.util.regex.Pattern;
+
 //http://www.tutorialspoint.com/java/java_using_comparator.htm
+//http://stackoverflow.com/questions/31402113/why-i-cannot-split-string-with-in-java
 /*
  * prefixComparator
  *
@@ -51,8 +54,10 @@ class prefixComparator implements Comparator<prefix>
  */
 class prefix
 {
-    public ArrayList<Integer> net = new ArrayList<Integer>();
-    //public int[]       net = {0,0,0,0};
+
+    public int[]       net = {0,0,0,0};
+   // public int[] net = new int[4];
+
     public int         len;
     public String      asn;
 
@@ -69,20 +74,22 @@ class prefix
     }
     private void addToNet(String x )
     {
-        String arrayString[] = x.split(".");
-        net.add(Integer.parseInt(arrayString[0]));
-        net.add(Integer.parseInt(arrayString[1]));
-        net.add(Integer.parseInt(arrayString[2]));
+        System.out.println(x);
 
-        //this.net[0] = Integer.parseInt(arrayString[0]);
-        //this.net[1] = Integer.parseInt(arrayString[1]);
-        //this.net[2] = Integer.parseInt(arrayString[2]);
-        //this.net[3] = Integer.parseInt(arrayString[3]);
+        String arrayString[] = x.split(Pattern.quote("."));
+        this.net[0] = Integer.parseInt(arrayString[0]);
+        System.out.println(net[0]);
+        this.net[1] = Integer.parseInt(arrayString[1]);
+        System.out.println(net[1]);
+        this.net[2] = Integer.parseInt(arrayString[2]);
+        System.out.println(net[2]);
+        this.net[3] = Integer.parseInt(arrayString[3]);
+        System.out.println(net[3]);
     }
     public String toString()
     {
 	/* pretty print out of the prefix! my lecturer is kind! */
-       return net.get(0) + "." + net.get(1) + "." + net.get(2) + "." + net.get(3) + "/" + len;
+       return net[0] + "." + net[1] + "." + net[2] + "." + net[3] + "/" + len;
     }
 
     /*
