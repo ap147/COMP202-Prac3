@@ -1,7 +1,4 @@
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.io.*;
 import java.util.regex.Pattern;
@@ -37,12 +34,12 @@ class prefixComparator implements Comparator<prefix>
 
         if(a.len > b.len)
         {
-            //System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
+            //System.out.println("a has a lesser prefix than b : a:" + a.len + " b : " + b.len);
             return -1;
         }
         else if(a.len < b.len)
         {
-           // System.out.println("a has a smaller prefix than b : a:" + a.len + " b : " + b.len);
+           // System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
             return 1;
         }
 
@@ -70,7 +67,7 @@ class prefix
 
     public prefix(String net, int len, String asn)
     {
-	/*------------------------------------------------------------------------
+	/*
 	 * XXX:
 	 * initialise the object given the inputs.  break
 	 * the network ID into four integers.
@@ -130,6 +127,7 @@ class prefix
         //COMPARE 8 Bits
         for(int i=0; i<4; i++)
         {
+            //Compaing the 4 diffrent values, if one of the values dont match, meaning this is not the route
             int temp = match;
             match = match + mask4me(i,net[i], array[i]);
             if (match == temp)
@@ -150,13 +148,17 @@ class prefix
         }
         return Result;
     }
+    //if returns one then ip and prefix matchs
     private int mask4me(int index, int net, int ip)
     {
+        //A Mask
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
+        //Which combination of masks to use on diffrent len (/23)
         int[] maskUsed;
         if(len== 24)
         {
             maskUsed = new int[]{0xFF,0xFF ,0xFF, 0x0};
+            //Masking to see if equal
             if(net  == (ip & maskUsed[index]))
             {
                 return 1;
@@ -292,8 +294,6 @@ class prefix
         }
         return 0;
     }
-
-
 };
 
 class ip2as
@@ -317,24 +317,30 @@ class ip2as
 
             while((line = file.readLine()) != null)
             {
-		/* -------------------------------------------------XXX: add code to parse the ip2as line */
-                String net, ases;
-                int len;
+		/* XXX: add code to parse the ip2as line */
+                try {
+                    String net, ases;
+                    int len;
 
-                String array[] = line.split(" ");
-                String array2[] = array[0].split("/");
+                    String array[] = line.split(" ");
+                    String array2[] = array[0].split("/");
 
-                //85.29.150.0/23 21299
-                //Getting "1.1.1.1/2" "1.1.1.1"
-                net = array2[0];
-                //Getting "1.1.1.1/2" "/"
-                len = Integer.parseInt(array2[1]);
-                ases = array[1];
+                    //85.29.150.0/23 21299
+                    //Getting "1.1.1.1/2" "1.1.1.1"
+                    net = array2[0];
+                    //Getting "1.1.1.1/2" "/"
+                    len = Integer.parseInt(array2[1]);
+                    ases = array[1];
 
 
 		        /* create a new prefix object and stuff it in the list */
-                prefix pf = new prefix(net, len, ases);
-                list.add(pf);
+                    prefix pf = new prefix(net, len, ases);
+                    list.add(pf);
+                }
+                catch(Exception e)
+                {
+                    System.out.println("invalid IP " + e);
+                }
             }
             file.close();
         }
@@ -382,17 +388,17 @@ class ip2as
             {
                  p = x[j];
 
-		/*-------------------------------------------------------------------------
+		/*
 		 * XXX:
-		 * check if this prefix matches the IP address passed in----------------------------------------------
+		 * check if this prefix matches the IP address passed in
 		 */
 		        boolean Result = p.match(args[i]);
                 if(Result == true)
                 {
+                    //Storing ASNs here incase prefix has multiple
                     String array[];
-
                     array = p.asn.split("_");
-
+                    //printing all the ASN names that this prefix belongs to
                     for(int y = 0; y < array.length; y++)
                     {
                         System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(Integer.parseInt(array[y])));
