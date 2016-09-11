@@ -372,7 +372,7 @@ class ip2as
 	System.out.println();
         for(int i=2; i<args.length; i++)
         {
-            int matched = 0;
+            boolean matched = false;
 	    /*
 	     * x contains the sorted array of prefixes, organised longest
 	     * to shortest prefix match
@@ -389,9 +389,16 @@ class ip2as
 		        boolean Result = p.match(args[i]);
                 if(Result == true)
                 {
-                    int ASN = Integer.parseInt(p.asn);
+                    String array[];
+
+                    array = p.asn.split("_");
+
+                    for(int y = 0; y < array.length; y++)
+                    {
+                        System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(Integer.parseInt(array[y])));
+                    }
                     //3. Ensure you handle the case where there is no name for a given ASN.
-                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(ASN));
+                    matched = true ;
                     break;
                 }
             }
@@ -401,7 +408,7 @@ class ip2as
 	     */
             //Ensure you handle the case where there is no prex covering an IP address (i.e. no mapping
             //from an IP to an ASN).
-	        if (matched == 0)
+	        if (matched == false)
             {
                 System.out.println( args[i]+" : no prefix");
             }
