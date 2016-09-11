@@ -38,12 +38,12 @@ class prefixComparator implements Comparator<prefix>
         if(a.len > b.len)
         {
             //System.out.println("a has a greater prefix than b : a:" + a.len + " b : " + b.len);
-            return 1;
+            return -1;
         }
         else if(a.len < b.len)
         {
            // System.out.println("a has a smaller prefix than b : a:" + a.len + " b : " + b.len);
-            return -1;
+            return 1;
         }
 
         return result;
@@ -130,8 +130,12 @@ class prefix
         //COMPARE 8 Bits
         for(int i=0; i<4; i++)
         {
+            int temp = match;
             match = match + mask4me(i,net[i], array[i]);
-
+            if (match == temp)
+            {
+                return false;
+            }
 	    /*
 	     * XXX:
 	     * compare up to four different values in the dotted quad,
@@ -153,7 +157,7 @@ class prefix
         if(len== 24)
         {
             maskUsed = new int[]{0xFF,0xFF ,0xFF, 0x0};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -161,7 +165,7 @@ class prefix
         else if(len == 23)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xFE, 0x0};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -169,7 +173,7 @@ class prefix
         else if(len == 22)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xFC, 0x0};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -177,7 +181,7 @@ class prefix
         else if(len == 21)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xF8, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -185,7 +189,7 @@ class prefix
         else if(len == 20)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xF0, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -193,7 +197,7 @@ class prefix
         else if(len == 19)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xE0, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -201,7 +205,7 @@ class prefix
         else if(len == 18)
         {
             maskUsed = new int[]{0xFF ,0xFF,0xC0, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -209,7 +213,7 @@ class prefix
         else if(len == 17)
         {
             maskUsed = new int[]{0xFF ,0xFF,0x80, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -217,7 +221,7 @@ class prefix
         else if(len == 16)
         {
             maskUsed = new int[]{0xFF ,0xFF,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -225,7 +229,7 @@ class prefix
         else if(len == 15)
         {
             maskUsed = new int[]{0xFF ,0xFE,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -233,7 +237,7 @@ class prefix
         else if(len == 14)
         {
             maskUsed = new int[]{0xFF ,0xFC,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -241,7 +245,7 @@ class prefix
         else if(len == 13)
         {
             maskUsed = new int[]{0xFF ,0xF8,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -249,7 +253,7 @@ class prefix
         else if(len == 12)
         {
             maskUsed = new int[]{0xFF ,0xF0,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -257,7 +261,7 @@ class prefix
         else if(len == 11)
         {
             maskUsed = new int[]{0xFF ,0xE0,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -265,7 +269,7 @@ class prefix
         else if(len == 10)
         {
             maskUsed = new int[]{0xFF ,0xC0,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -273,7 +277,7 @@ class prefix
         else if(len == 9)
         {
             maskUsed = new int[]{0xFF ,0x80,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -281,7 +285,7 @@ class prefix
         else if(len == 8)
         {
             maskUsed = new int[]{0xFF ,0x00,0x00, 0x00};
-            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            if(net  == (ip & maskUsed[index]))
             {
                 return 1;
             }
@@ -388,6 +392,7 @@ class ip2as
                     int ASN = Integer.parseInt(p.asn);
                     //3. Ensure you handle the case where there is no name for a given ASN.
                     System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(ASN));
+                    break;
                 }
             }
 	    /*
