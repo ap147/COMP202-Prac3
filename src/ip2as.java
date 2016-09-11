@@ -139,6 +139,12 @@ class prefix
      */
     public boolean match(String addr)
     {
+        //Do not load any prex less specic than a /8, or more specic than a /24.
+        if(len > 8 || len < 24)
+        {
+            return false;
+        }
+
         int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         boolean Result = false;
         int match = 0;
@@ -146,8 +152,6 @@ class prefix
 	     * XXX:------------------------------------------------------------------------
 	     * break up the address passed in as a string
 	     */
-
-
         //IP
         String arrayString[] = addr.split(Pattern.quote("."));
         int result;
@@ -162,12 +166,6 @@ class prefix
         //COMPARE 8 Bits
         for(int i=0; i<4; i++)
         {
-
-
-             // if((array[i] & mask[6]) == (net[i] & mask[6]))
-               //   match++;
-
-
 
 
 	    /*
@@ -189,20 +187,12 @@ class prefix
     {
         return len;
     }
-    protected int getMask(int position)
-    {
-        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
-        int maskresult =0;
 
-
-
-        return maskresult;
-    }
 };
 
 class ip2as
 {
-    protected static ArrayList<String> ASNlist = new ArrayList<>();
+    protected static String [] ASNArray = new String[51642];
     public static void main(String args[]) throws UnknownHostException {
         if(args.length < 3)
         {
@@ -259,11 +249,13 @@ class ip2as
         prefix []x = new prefix[list.size()];
         list.toArray(x);
         Arrays.sort(x, new prefixComparator());
+
 	/*
 	 * read in the asnames file so that we can report the
 	 * network's name with its ASN
 	 */
         FetchASNames(args[1]);
+        printArrayASN();
 
 
 	/*
@@ -293,7 +285,12 @@ class ip2as
 		        boolean Result = p.Eazymatch(args[i]);
                 if(Result == true)
                 {
-                    System.out.println( args[i] +" "+ p.toString()+ " " +GetASNName(p.len));
+                    int ASN = Integer.parseInt(p.asn);
+
+                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(1849595));
+                    //Ensure you handle the case where there is no prex covering an IP address (i.e. no mapping
+                    //from an IP to an ASN).
+                    //3. Ensure you handle the case where there is no name for a given ASN.
                 }
             }
 	    /*
@@ -317,10 +314,12 @@ class ip2as
         {
             BufferedReader file = new BufferedReader(new FileReader(fileName));
             String line;
-
+            int x =0;
             while((line = file.readLine()) != null)
             {
-                ASNlist.add(line);
+                ASNArray[x] = line;
+                //ASNlist.add(line);
+                x++;
             }
             file.close();
         }
@@ -335,17 +334,32 @@ class ip2as
         }
     }
 
+
     //finds the AS Name by a AS Number
-    private static String GetASNName(int p)
+    private static void printArrayASN()
     {
-        try
-        {
-            String ASN = ASNlist.get(p);
-            return ASN;
+        System.out.println("Printing ARRAY ASN!!");
+        for(int x = 0;  x < ASNArray.length; x++) {
+            System.out.println(ASNArray[x]);
         }
-        catch(Exception x)
+    }
+    private static String getASNName(int a)
+    {
+        for(int x = 0; x<ASNArray.length; x++)
         {
-            return "";
+            String temp = ASNArray[x];
+            String array[] = temp.split(" ");
+
+            int ASNNumber = Integer.parseInt(array[0]);
+
+            if(ASNNumber == a)
+            {
+                return temp;
+            }
+
         }
+
+        return "";
+
     }
 };
