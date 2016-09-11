@@ -192,7 +192,7 @@ class prefix
 
 class ip2as
 {
-    protected static String [] ASNArray = new String[51642];
+    protected static String [] ASNArray = new String[52650];
     public static void main(String args[]) throws UnknownHostException {
         if(args.length < 3)
         {
@@ -255,8 +255,6 @@ class ip2as
 	 * network's name with its ASN
 	 */
         FetchASNames(args[1]);
-        printArrayASN();
-
 
 	/*
 	 * for all IP addresses supplied on the command line, print
@@ -286,21 +284,18 @@ class ip2as
                 if(Result == true)
                 {
                     int ASN = Integer.parseInt(p.asn);
-
-                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(1849595));
-                    //Ensure you handle the case where there is no prex covering an IP address (i.e. no mapping
-                    //from an IP to an ASN).
                     //3. Ensure you handle the case where there is no name for a given ASN.
+                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(12));
                 }
             }
 	    /*
 	     * XXX:---------------------------------------------------------------------------------------------
 	     * print something out if it was not matched
 	     */
-
+            //Ensure you handle the case where there is no prex covering an IP address (i.e. no mapping
+            //from an IP to an ASN).
 	        if (matched == 0)
             {
-                System.out.println(p.getLen());
                 System.out.println( args[i]+" : no prefix");
             }
         }
@@ -333,33 +328,28 @@ class ip2as
             System.err.println("error reading ASN file " + fileName + ": " +e);
         }
     }
-
-
-    //finds the AS Name by a AS Number
-    private static void printArrayASN()
-    {
-        System.out.println("Printing ARRAY ASN!!");
-        for(int x = 0;  x < ASNArray.length; x++) {
-            System.out.println(ASNArray[x]);
-        }
-    }
+    //returns a ASN Name
     private static String getASNName(int a)
     {
         for(int x = 0; x<ASNArray.length; x++)
         {
-            String temp = ASNArray[x];
-            String array[] = temp.split(" ");
+            try {
+                     String temp = ASNArray[x];
+                    String array[] = temp.split(" ");
 
-            int ASNNumber = Integer.parseInt(array[0]);
 
-            if(ASNNumber == a)
-            {
-                return temp;
-            }
-
+                    int ASNNumber = Integer.parseInt(array[0]);
+                    if (ASNNumber == a)
+                    {
+                        return temp;
+                    }
+                }
+                catch (Exception c)
+                {
+                }
         }
 
-        return "";
 
+        return "";
     }
 };
