@@ -79,6 +79,7 @@ class prefix
         this.asn = asn;
         this.len = len;
     }
+    //Stores IP in 8 bits in each index of a array
     private void addToNet(String x )
     {
         String arrayString[] = x.split(Pattern.quote("."));
@@ -94,42 +95,6 @@ class prefix
        return net[0] + "." + net[1] + "." + net[2] + "." + net[3] + "/" + len;
     }
 
-    public boolean Eazymatch(String addr) throws UnknownHostException {
-
-
-
-        //IP
-        String       s = addr;
-        Inet4Address a = (Inet4Address) InetAddress.getByName(s);
-        byte [] ipByte = a.getAddress();
-        int IP = ((ipByte[0] & 0xFF) << 24) |
-                ((ipByte[1] & 0xFF) << 16) |
-                ((ipByte[2] & 0xFF) << 8)  |
-                ((ipByte[3] & 0xFF) << 0);
-
-        //SUBNET
-        Inet4Address b = (Inet4Address) InetAddress.getByName(easyNet);
-        byte [] subByte = b.getAddress();
-        int Subnet = ((subByte[0] & 0xFF) << 24) |
-                ((subByte[1] & 0xFF) << 16) |
-                ((subByte[2] & 0xFF) << 8)  |
-                ((subByte[3] & 0xFF) << 0);
-
-
-        int subnetBits = len;
-
-        int mask = -1 << (32 - subnetBits);
-
-        if((Subnet & mask) == (IP& mask))
-        {
-            System.out.println(addr);
-            System.out.println(this.toString());
-            System.out.println(this.asn);
-            return true;
-        }
-        return false;
-
-    }
 
     /*
      * match
@@ -140,12 +105,11 @@ class prefix
     public boolean match(String addr)
     {
         //Do not load any prex less specic than a /8, or more specic than a /24.
-        if(len > 8 || len < 24)
+        if(len < 8 || len > 24)
         {
             return false;
         }
 
-        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
         boolean Result = false;
         int match = 0;
         /*
@@ -166,7 +130,7 @@ class prefix
         //COMPARE 8 Bits
         for(int i=0; i<4; i++)
         {
-
+            match = match + mask4me(i,net[i], array[i]);
 
 	    /*
 	     * XXX:
@@ -176,17 +140,155 @@ class prefix
 	     */
         }
 
-
-        if(match == 3)
+        if(match == 4)
         {
             return true;
         }
         return Result;
     }
-    public int getLen()
+    private int mask4me(int index, int net, int ip)
     {
-        return len;
+        int[] mask = {0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF};
+        int[] maskUsed;
+        if(len== 24)
+        {
+            maskUsed = new int[]{0xFF,0xFF ,0xFF, 0x0};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 23)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xFE, 0x0};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 22)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xFC, 0x0};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 21)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xF8, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 20)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xF0, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 19)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xE0, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 18)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0xC0, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 17)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0x80, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 16)
+        {
+            maskUsed = new int[]{0xFF ,0xFF,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 15)
+        {
+            maskUsed = new int[]{0xFF ,0xFE,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 14)
+        {
+            maskUsed = new int[]{0xFF ,0xFC,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 13)
+        {
+            maskUsed = new int[]{0xFF ,0xF8,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 12)
+        {
+            maskUsed = new int[]{0xFF ,0xF0,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 11)
+        {
+            maskUsed = new int[]{0xFF ,0xE0,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 10)
+        {
+            maskUsed = new int[]{0xFF ,0xC0,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 9)
+        {
+            maskUsed = new int[]{0xFF ,0x80,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        else if(len == 8)
+        {
+            maskUsed = new int[]{0xFF ,0x00,0x00, 0x00};
+            if((net & maskUsed[index]) == (ip & maskUsed[index]))
+            {
+                return 1;
+            }
+        }
+        return 0;
     }
+
 
 };
 
@@ -280,12 +382,12 @@ class ip2as
 		 * XXX:
 		 * check if this prefix matches the IP address passed in----------------------------------------------
 		 */
-		        boolean Result = p.Eazymatch(args[i]);
+		        boolean Result = p.match(args[i]);
                 if(Result == true)
                 {
                     int ASN = Integer.parseInt(p.asn);
                     //3. Ensure you handle the case where there is no name for a given ASN.
-                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(12));
+                    System.out.println( args[i] +" "+ p.toString()+ " " +getASNName(ASN));
                 }
             }
 	    /*
