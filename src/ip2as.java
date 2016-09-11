@@ -101,16 +101,10 @@ class prefix
      */
     public boolean match(String addr)
     {
-        //Do not load any prex less specic than a /8, or more specic than a /24.
-        if(len < 8 || len > 24)
-        {
-            return false;
-        }
-
         boolean Result = false;
         int match = 0;
         /*
-	     * XXX:------------------------------------------------------------------------
+	     * XXX:
 	     * break up the address passed in as a string
 	     */
         //IP
@@ -148,7 +142,7 @@ class prefix
         }
         return Result;
     }
-    //if returns one then ip and prefix matchs
+    //if returns one if ip and prefix matchs otherwise 0
     private int mask4me(int index, int net, int ip)
     {
         //A Mask
@@ -298,6 +292,7 @@ class prefix
 
 class ip2as
 {
+    //Store ASN Names/Number in this list when extracting from asnames.txt
     protected static String [] ASNArray = new String[52650];
     public static void main(String args[]) throws UnknownHostException {
         if(args.length < 3)
@@ -333,9 +328,13 @@ class ip2as
                     ases = array[1];
 
 
-		        /* create a new prefix object and stuff it in the list */
-                    prefix pf = new prefix(net, len, ases);
-                    list.add(pf);
+                    //Do not load any prex less specic than a /8, or more specic than a /24.
+                    if(len >= 8 || len <= 24)
+                    {
+ /* create a new prefix object and stuff it in the list */
+                        prefix pf = new prefix(net, len, ases);
+                        list.add(pf);
+                    }
                 }
                 catch(Exception e)
                 {
@@ -395,7 +394,7 @@ class ip2as
 		        boolean Result = p.match(args[i]);
                 if(Result == true)
                 {
-                    //Storing ASNs here incase prefix has multiple
+                    //Storing ASNs here incase prefix has multiple 12_12
                     String array[];
                     array = p.asn.split("_");
                     //printing all the ASN names that this prefix belongs to
@@ -468,8 +467,6 @@ class ip2as
                 {
                 }
         }
-
-
         return "";
     }
 };
